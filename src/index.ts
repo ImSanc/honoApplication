@@ -2,7 +2,18 @@ import { Hono } from 'hono'
 
 const app = new Hono()
 
-app.get('/', async (c) => {
+async function  authMiddleWare( c : any  , next : any) {
+  if( c.req.header("Authorization"))
+  {
+    await next();
+  }
+  else
+  {
+    return c.json("You dont have access");
+  }
+}
+
+app.get('/',authMiddleWare ,async (c : any) => {
   const body = await c.req.json();
 
   console.log(body);
